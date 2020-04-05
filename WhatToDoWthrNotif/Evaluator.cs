@@ -10,6 +10,17 @@ namespace WhatToDoWthrNotif
         private List<WeatherCondition> _weatherConditions;
         private List<WeatherCondition> _futurePressures;
 
+        private int _tempWeight = 7;
+        private int _pressureWeight = 5;
+        private int _humidityWeight = 2;
+        private int _weatherDescWeight = 10;
+        private int _cloudWeight = 4;
+        private int _windSpeed = 8;
+        private int _windDirection = 9;
+        private int _rain = 6;
+    
+        private int _tempIdeal = 75;
+
         public Evaluator(List<WeatherCondition> weatherConditions, List<WeatherCondition> futurePressures)
         {
             _weatherConditions = weatherConditions;
@@ -27,9 +38,10 @@ namespace WhatToDoWthrNotif
 
         private void scoreTemperature()
         {
-            var temp = this._weatherConditions.Find(t => t.Name == "Temperature");
+            var tempCondition = this._weatherConditions.Find(t => t.Name == "Temperature");
+            Console.WriteLine(tempCondition.Name + "-------" + tempCondition.CurrentStatus);
 
-            Console.WriteLine(temp.Name + "-------" + temp.CurrentStatus);
+
         }
 
         private void scorePressure()
