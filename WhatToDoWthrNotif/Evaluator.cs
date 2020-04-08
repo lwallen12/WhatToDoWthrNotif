@@ -8,10 +8,10 @@ namespace WhatToDoWthrNotif
     {
 
         private List<WeatherCondition> _weatherConditions;
-        private List<WeatherCondition> _futurePressures;
+        private List<WeatherCondition> _previousPressures;
 
         private int _tempWeight = 7;
-        private int _pressureWeight = 5;
+        private int _pressureWeight = 8;
         private int _humidityWeight = 2;
         private int _weatherDescWeight = 10;
         private int _cloudWeight = 4;
@@ -24,7 +24,7 @@ namespace WhatToDoWthrNotif
         public Evaluator(List<WeatherCondition> weatherConditions, List<WeatherCondition> futurePressures)
         {
             _weatherConditions = weatherConditions;
-            _futurePressures = futurePressures;
+            _previousPressures = futurePressures;
         }
 
         /// <summary>
@@ -36,25 +36,77 @@ namespace WhatToDoWthrNotif
             scorePressure();
         }
 
-        private void scoreTemperature()
+        private int scoreTemperature()
         {
             var tempCondition = this._weatherConditions.Find(t => t.Name == "Temperature");
             Console.WriteLine(tempCondition.Name + "-------" + tempCondition.CurrentStatus);
 
+            var temperature = Convert.ToDecimal(tempCondition.CurrentStatus);
+            var absTemperature = Math.Abs(temperature - _tempIdeal);
+
+            if (tempCondition.Location != "Conroe")
+            {
+                if (temperature > 70)
+                {
+                    return 10;
+                }
+
+                else
+                {
+                    return 5;
+                }
+            }
+
+            if (absTemperature < 10)
+            {
+                return 10;
+            }
+            else if (absTemperature < 15)
+            {
+                return 9;
+            }
+            else if (absTemperature < 20)
+            {
+                return 6;
+            }
+            else if (absTemperature < 25)
+            {
+                return 4;
+            }
+
+            else return 1;
 
         }
 
         private void scorePressure()
         {
-            if (_futurePressures.Count > 0)
+            if (_previousPressures.Count > 0)
             {
-                var x = _futurePressures[0].Name + "--" + _futurePressures[0].TimeFrame;
-                var y = _futurePressures[1].Name + "--" + _futurePressures[1].TimeFrame;
-                var z = _futurePressures[2].Name + "--" + _futurePressures[2].TimeFrame;
+                var weatherDescription = this._weatherConditions.Find(t => t.Name == "Weather Description");
+                var currentPressureObject = _weatherConditions.Find(p => p.Name == "Pressure");
 
-                Console.WriteLine(x);
-                Console.WriteLine(y);
-                Console.WriteLine(z);
+                Console.WriteLine(weatherDescription.CurrentStatus);
+
+                var now = currentPressureObject.Name + "--" + currentPressureObject.TimeFrame + "--" + currentPressureObject.CurrentStatus;
+                var x = _previousPressures[0].Name + "--" + _previousPressures[0].TimeFrame + "--" + _previousPressures[0].CurrentStatus;
+                var y = _previousPressures[1].Name + "--" + _previousPressures[1].TimeFrame + "--" + _previousPressures[1].CurrentStatus;
+                var z = _previousPressures[2].Name + "--" + _previousPressures[2].TimeFrame + "--" + _previousPressures[2].CurrentStatus;
+                var a = _previousPressures[3].Name + "--" + _previousPressures[3].TimeFrame + "--" + _previousPressures[3].CurrentStatus;
+
+                Console.WriteLine("Now: " + now); //24h
+                Console.WriteLine(x); //21h
+                Console.WriteLine(y); //18h
+                Console.WriteLine(z); //15h
+                Console.WriteLine(a); //12h
+
+                decimal highAirPressure = 1013.2M;
+                decimal lowAirPressure = 1009.2M;
+
+                decimal targetTimePressure = Convert.ToDecimal(currentPressureObject.CurrentStatus);
+                decimal threePressure = Convert.ToDecimal(_previousPressures[0].CurrentStatus);
+                decimal sixPressure = Convert.ToDecimal(_previousPressures[1].CurrentStatus);
+                decimal ninePressure = Convert.ToDecimal(_previousPressures[2].CurrentStatus);
+                decimal twelvePressure = Convert.ToDecimal(_previousPressures[3].CurrentStatus);
             }
             else
             {

@@ -25,11 +25,11 @@ namespace WhatToDoWthrNotif
                 Console.WriteLine("Records in Selection: " + conditions.Count());
 
 
-                int pressCounter = 9;
+                //int pressCounter = 24;
                 for (int i = 0; i < conditions.Count; i += 8)
                 {
                     List<WeatherCondition> currentSeriesConds = new List<WeatherCondition>();
-                    List<WeatherCondition> futurePressures = new List<WeatherCondition>();
+                    List<WeatherCondition> previousPressures = new List<WeatherCondition>();
 
                     int j = i;
                     while (j < (i + 8))
@@ -39,7 +39,7 @@ namespace WhatToDoWthrNotif
                     }
 
                     //I can change this data to numeric and drop the h... that is if I don't entirely restructure
-                    if (conditions[i].TimeFrame == "123h" || conditions[i].TimeFrame == "120h" || conditions[i].TimeFrame == "117h")
+                    if (conditions[i].TimeFrame == "6h" || conditions[i].TimeFrame == "9h" || conditions[i].TimeFrame == "12h" || conditions[i].TimeFrame =="15h")
                     {
 
                         foreach (WeatherCondition w in currentSeriesConds)
@@ -50,15 +50,18 @@ namespace WhatToDoWthrNotif
                     }
                     else
                     {
-                        futurePressures.Add(conditions[pressCounter]);
-                        futurePressures.Add(conditions[pressCounter + 8]);
-                        futurePressures.Add(conditions[pressCounter + 16]);
+                        //Console.WriteLine("LETS ADD THIS" + conditions[i - 7].Name + "---" + conditions[i - 7].TimeFrame);
+                        previousPressures.Add(conditions[i - 7]);
+                        previousPressures.Add(conditions[i - 15]);
+                        previousPressures.Add(conditions[i - 23]);
+                        previousPressures.Add(conditions[i - 31]);
+
                     }
 
-                    Evaluator evaluator = new Evaluator(currentSeriesConds, futurePressures);
+                    Evaluator evaluator = new Evaluator(currentSeriesConds, previousPressures);
                     evaluator.evaluateScenario();
 
-                    pressCounter = pressCounter + 8;
+                    //pressCounter = pressCounter - 8;
                 }
             }
         }
