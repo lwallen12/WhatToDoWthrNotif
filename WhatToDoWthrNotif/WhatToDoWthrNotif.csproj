@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.130" />
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="MySqlConnector" Version="0.63.1" />
   </ItemGroup>

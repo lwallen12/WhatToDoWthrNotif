@@ -14,7 +14,7 @@ namespace WhatToDoWthrNotif
 {
     public class Function
     {
-        
+        List<WeatherEvaluator> weatherEvaluators = new List<WeatherEvaluator>();
 
         public void FunctionHandler(ILambdaContext context)
         {
@@ -25,13 +25,13 @@ namespace WhatToDoWthrNotif
                 for (int i = 0; i < conditions.Count; i++)
                 {
 
-                    //bool timeOfCondition = isDay(conditions[i].ConditionDateTime);
+                    bool timeOfCondition = isDay(conditions[i].ConditionDateTime);
 
-                    //if (!timeOfCondition)
-                    //{
-                    //    Console.WriteLine(Convert.ToString(conditions[i].ConditionDateTime) + ": It is night");
-                    //    continue;
-                    //}
+                    if (!timeOfCondition)
+                    {
+                        Console.WriteLine(Convert.ToString(conditions[i].ConditionDateTime) + ": It is night");
+                        continue;
+                    }
 
                     List<double> previousPressures = new List<double>();
                     List<double> previousRains = new List<double>();
@@ -63,12 +63,19 @@ namespace WhatToDoWthrNotif
                     WeatherEvaluator weatherEvaluator = new WeatherEvaluator(conditions[i], previousPressures, previousRains, previousWindDirections, previousWindSpeeds);
                     double percentCorrect = weatherEvaluator.Evaluate();
 
-                    Console.WriteLine(Convert.ToString(percentCorrect) + "\n");   
+                    Console.WriteLine(Convert.ToString(percentCorrect) + "\n");
+
+                    if (percentCorrect > .80)
+                    {
+                        weatherEvaluators.Add(weatherEvaluator);
+                    }
                     
-                    //TODO: If percent correct is above some certain amount.. send an email out
 
                 }
             }
+
+            MailBuilder mailBuilder = new MailBuilder(weatherEvaluators);
+            mailBuilder.SendEmail();
         }
 
         public static bool isDay(DateTime conDT)

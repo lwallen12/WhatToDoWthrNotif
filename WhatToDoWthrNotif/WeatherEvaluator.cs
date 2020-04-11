@@ -6,11 +6,11 @@ namespace WhatToDoWthrNotif
 {
     public class WeatherEvaluator
     {
-        WeatherFull _weatherFull;
-        List<double> _previousPressures;
-        List<double> _previousRains;
-        List<double> _previousWindDirections;
-        List<double> _previousWindSpeeds;
+        public WeatherFull _weatherFull;
+        public List<double> _previousPressures;
+        public List<double> _previousRains;
+        public List<double> _previousWindDirections;
+        public List<double> _previousWindSpeeds;
 
         private int _idealTemp = 84;
 
