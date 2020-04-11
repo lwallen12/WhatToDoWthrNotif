@@ -63,7 +63,9 @@ namespace WhatToDoWthrNotif
                     WeatherEvaluator weatherEvaluator = new WeatherEvaluator(conditions[i], previousPressures, previousRains, previousWindDirections, previousWindSpeeds);
                     double percentCorrect = weatherEvaluator.Evaluate();
 
-                    Console.WriteLine(Convert.ToString(percentCorrect) + "\n");       
+                    Console.WriteLine(Convert.ToString(percentCorrect) + "\n");   
+                    
+                    //TODO: If percent correct is above some certain amount.. send an email out
 
                 }
             }
