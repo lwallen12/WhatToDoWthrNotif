@@ -24,7 +24,7 @@ namespace WhatToDoWthrNotif
         // is still in the sandbox, this address must be verified.
         //static readonly string receiverAddress = "william.allen1296@gmail.com; a.allenwill@gmail.com;";
 
-        List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com", "a.allenwill@gmail.com" };
+        List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com", "dieterttyler@gmail.com" };
 
         // The subject line for the email.
         static readonly string subject = "Fishing Conditions Program";
