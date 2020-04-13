@@ -3,7 +3,7 @@ using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace WhatToDoWthrNotif
 {
@@ -11,20 +11,21 @@ namespace WhatToDoWthrNotif
     {
         List<WeatherEvaluator> _weatherEvaluators;
 
+        List<UserSelection> _appUsers = new List<UserSelection>
+        {
+            new UserSelection {Email = "a.allenwill@gmail.com", LocationIds = new List<int> { 4682991, 4683416 } },
+            new UserSelection {Email = "william.allen1296@gmail.com", LocationIds = new List<int> { 4682991, 4683416, 4692856, 5117949 } }
+        };
+
+        List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com" };
+        //var receiverAddresses = _appUsers.Select(u => u.Email).ToList();
+
         public MailBuilder(List<WeatherEvaluator> weatherEvaluators)
         {
             this._weatherEvaluators = weatherEvaluators;
         }
 
-        // Replace sender@example.com with your "From" address.
-        // This address must be verified with Amazon SES.
         static readonly string senderAddress = "a.allenwill@gmail.com";
-
-        // Replace recipient@example.com with a "To" address. If your account
-        // is still in the sandbox, this address must be verified.
-        //static readonly string receiverAddress = "william.allen1296@gmail.com; a.allenwill@gmail.com;";
-
-        List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com", "dieterttyler@gmail.com" };
 
         // The subject line for the email.
         static readonly string subject = "Fishing Conditions Program";
@@ -40,6 +41,8 @@ namespace WhatToDoWthrNotif
             string strBody = "";
             foreach (WeatherEvaluator weatherEvaluator in _weatherEvaluators)
             {
+                //Probably need to slice the _weatherEvaluators down to only the locations picked by the user
+
                 string conHeading = Convert.ToString(weatherEvaluator._weatherFull.ConditionDateTime) + "---" + Convert.ToString(weatherEvaluator.TotalPercent) + "------" + weatherEvaluator._weatherFull.LocationName;
                 //
                 string pressureAction = weatherEvaluator.PressurePreviousAction;
@@ -88,6 +91,7 @@ namespace WhatToDoWthrNotif
                     </body>
                     </html>";
 
+            
 
             using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.USEast1))
             {
@@ -135,4 +139,5 @@ namespace WhatToDoWthrNotif
 
         }
     }
+
 }

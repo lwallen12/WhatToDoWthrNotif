@@ -73,15 +73,21 @@ namespace WhatToDoWthrNotif
 
                 }
             }
+            //Maybe a mail builer takes a collection of user objects? .... only sends the email with locations that user has selected?
 
             MailBuilder mailBuilder = new MailBuilder(weatherEvaluators);
             mailBuilder.SendEmail();
+
+            LinqTest lq = new LinqTest();
+            
+            lq.BuildUserSelection();
+            lq.printSomeStuff();
         }
 
         public static bool isDay(DateTime conDT)
         {
-            TimeSpan beginTime = new TimeSpan(5, 0, 0);
-            TimeSpan endTime = new TimeSpan(20, 0, 0);
+            TimeSpan beginTime = new TimeSpan(5, 0, 0); //5 a.m.
+            TimeSpan endTime = new TimeSpan(20, 0, 0); //8 p.m.
 
             TimeSpan conTimeOfDay = conDT.TimeOfDay;
 
@@ -101,7 +107,7 @@ namespace WhatToDoWthrNotif
         public int LocationId { get; set; }
         public int TimeFrameHour { get; set; }
         public DateTime ConditionDateTime { get; set; }
-        public DateTime? LastUpdate { get; set; }
+        public DateTime LastUpdate { get; set; }
         public double Temperature { get; set; }
         public double FeelsLike { get; set; }
         public double Pressure { get; set; }
