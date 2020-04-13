@@ -48,9 +48,9 @@ namespace WhatToDoWthrNotif
         }
 
 
-        public void BuildUserSelection()
+        public static List<UserSelection> BuildUserSelection()
         {
-
+            List<UserSelection> userSelections = new List<UserSelection>();
 
             using (var connection = new MySqlConnection("Server=test1.ce8cn9mhhgds.us-east-1.rds.amazonaws.com;Database=whattodo;Uid=Wallen;Pwd=MyRDSdb1;Allow User Variables=True;"))
             {
@@ -62,13 +62,14 @@ namespace WhatToDoWthrNotif
                     var locs = connection.Query<int>($"SELECT DISTINCT LocationId FROM UserSelection WHERE UserId = '{usr}';").ToList();
 
                     UserSelection userSelection = new UserSelection(usr, locs);
-                    _appUsers.Add(userSelection);
+                    userSelections.Add(userSelection);
 
                 }
 
             }
 
-            Console.WriteLine(_appUsers.Count());
+            return userSelections;
+            //Console.WriteLine(_appUsers.Count());
         }
 
 

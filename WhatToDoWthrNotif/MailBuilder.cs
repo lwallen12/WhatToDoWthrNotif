@@ -10,19 +10,17 @@ namespace WhatToDoWthrNotif
     public class MailBuilder
     {
         List<WeatherEvaluator> _weatherEvaluators;
+        UserSelection _userSelection;
+        List<string> _receiverAddresses = new List<string>();
 
-        List<UserSelection> _appUsers = new List<UserSelection>
-        {
-            new UserSelection {Email = "a.allenwill@gmail.com", LocationIds = new List<int> { 4682991, 4683416 } },
-            new UserSelection {Email = "william.allen1296@gmail.com", LocationIds = new List<int> { 4682991, 4683416, 4692856, 5117949 } }
-        };
-
-        List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com" };
+        //List<string> receiverAddresses = new List<string> { "william.allen1296@gmail.com" };
         //var receiverAddresses = _appUsers.Select(u => u.Email).ToList();
 
-        public MailBuilder(List<WeatherEvaluator> weatherEvaluators)
+        public MailBuilder(List<WeatherEvaluator> weatherEvaluators, UserSelection userSelection)
         {
             this._weatherEvaluators = weatherEvaluators;
+            this._userSelection = userSelection;
+            this._receiverAddresses.Add(userSelection.Email);
         }
 
         static readonly string senderAddress = "a.allenwill@gmail.com";
@@ -31,17 +29,28 @@ namespace WhatToDoWthrNotif
         static readonly string subject = "Fishing Conditions Program";
 
         // The email body for recipients with non-HTML email clients.
-        static readonly string textBody = "Amazon SES Test (.NET)\r\n"
-                                        + "This email was sent through Amazon SES "
-                                        + "using the AWS SDK for .NET.";
+        static readonly string textBody = "Amazon SES (.NET)\r\n"
+                                        + "You must have a HTML client email in order to receive updates at this point.";
 
         public string buildBody()
         {
+
+            
+
 
             string strBody = "";
             foreach (WeatherEvaluator weatherEvaluator in _weatherEvaluators)
             {
                 //Probably need to slice the _weatherEvaluators down to only the locations picked by the user
+
+                int currentLocationId = weatherEvaluator._weatherFull.LocationId;
+
+                bool has = _userSelection.LocationIds.Any(id => id == currentLocationId);
+
+                if (!has)
+                {
+                    continue;
+                }
 
                 string conHeading = Convert.ToString(weatherEvaluator._weatherFull.ConditionDateTime) + "---" + Convert.ToString(weatherEvaluator.TotalPercent) + "------" + weatherEvaluator._weatherFull.LocationName;
                 //
@@ -100,7 +109,7 @@ namespace WhatToDoWthrNotif
                     Source = senderAddress,
                     Destination = new Destination
                     {
-                        ToAddresses = receiverAddresses
+                        ToAddresses = _receiverAddresses
                     },
                     Message = new Message
                     {

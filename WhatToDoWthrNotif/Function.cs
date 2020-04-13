@@ -75,13 +75,22 @@ namespace WhatToDoWthrNotif
             }
             //Maybe a mail builer takes a collection of user objects? .... only sends the email with locations that user has selected?
 
-            MailBuilder mailBuilder = new MailBuilder(weatherEvaluators);
-            mailBuilder.SendEmail();
+            //foreach UserSelection { mailBuilder.SendEmail, now constructor should take a UserSelection}
 
-            LinqTest lq = new LinqTest();
+            List<UserSelection> userSelections = LinqTest.BuildUserSelection();
+
+            foreach (UserSelection usr in userSelections)
+            {
+                MailBuilder mailBuilder = new MailBuilder(weatherEvaluators, usr);
+                mailBuilder.SendEmail();
+            }
+
             
-            lq.BuildUserSelection();
-            lq.printSomeStuff();
+
+           // LinqTest lq = new LinqTest();
+            
+            
+            //lq.printSomeStuff();
         }
 
         public static bool isDay(DateTime conDT)
